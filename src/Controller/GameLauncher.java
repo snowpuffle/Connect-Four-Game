@@ -6,17 +6,21 @@ import Model.Game;
 import View.GameView;
 
 public class GameLauncher {
+
+    // Define Class Variables
     GameView gameView;
     Game game;
 
     // Class Constructor
     public GameLauncher() {
+
+        // Create Game View & Make New Game
         gameView = new GameView();
         game = gameView.makeGame();
 
         boolean isEndGame = false;
 
-        // Loop until Game is Over or Encounters an Error
+        // Loop until the Game is Over or Encounters an Error
         while (true) {
             // Is the Game Over?
             if (getGame().isEndGame()) {
@@ -24,23 +28,23 @@ public class GameLauncher {
                 break;
             }
 
-            // Print Game Board
+            // Print the Game Board
             gameView.printGameBoard(getGame());
 
-            // Try to Convert Column to Integer
+            // Try to Convert Column Input to an Integer
             int columnToInsert = -1;
             try {
-                //
                 columnToInsert = gameView.playTurn(game.getTurnPlayer().getPlayerName());
             } catch (NumberFormatException e) {
                 System.out.println("ERROR: Invalid Number Format!");
             }
 
-            // Try to Insert Disc if Column Format is Valid
+            // Try to Insert the Disc
             try {
                 if (getGame().insertDisc(columnToInsert)) {
                     break;
                 }
+                // End the Player's Turn if Disc Insertion is Successful
                 getGame().endTurn();
             } catch (ColumnFullException e1) {
                 System.out.println("ERROR: Column is Full!");
@@ -55,21 +59,22 @@ public class GameLauncher {
         } else {
             gameView.printGameBoard(getGame());
             System.out.println("************************************************************************");
-            System.out.println(getGame().getTurnPlayer().getPlayerName() + " Won!");
+            System.out.println(getGame().getTurnPlayer().getPlayerName() + " Has Won!");
             System.out.println("************************************************************************");
         }
+    }
+
+    // Getter Method
+    public Game getGame() {
+        return game;
+    }
+
+    // Setter Method
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public static void main(String[] args) {
         new GameLauncher();
     }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
 }

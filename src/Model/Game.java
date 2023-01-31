@@ -4,13 +4,16 @@ import Exceptions.ColumnFullException;
 import Exceptions.InvalidColumnException;
 
 public class Game {
+
+    // Define Class Variables
     Disc[][] gameBoard;
     Player playerOne;
     Player playerTwo;
-    final int numberOfRows = 6;
-    final int numberOfColumns = 7;
     boolean turn;
 
+    final int numberOfRows = 6;
+    final int numberOfColumns = 7;
+    
     // Class Constructor
     public Game(Player playerOne, Player playerTwo) {
 
@@ -77,9 +80,19 @@ public class Game {
         this.gameBoard = gameBoard;
     }
 
+    // Get the Number of Rows
+    public int getNumberOfRows() {
+        return numberOfRows;
+    }
+
+    // Get the Number of Columns
+    public int getNumberOfColumns() {
+        return numberOfColumns;
+    }
+
     // Insert Disc & Throw Exceptions if Necessary
     public boolean insertDisc(int columnNumber) throws ColumnFullException, InvalidColumnException {
-        // Create New Disc Object Based on Turn Player
+        // Create a New Disc Object Based on the Turn Player
         Disc disc;     
         if (getTurnPlayer().getPlayerType() == PlayerType.PLAYER_ONE) {
             disc = new PlayerOneDisc(getTurnPlayer());
@@ -97,19 +110,20 @@ public class Game {
             throw new ColumnFullException();
         }
 
-        // Insert Disc and Check for a Win
+        // Insert the Disc and Check for a Win
         for (int i = 0; i < numberOfRows - 1; i++) {
 
-            // Insert Disc if a Disc Exists Below
+            // Insert the Disc if a Disc Exists Below
             if (gameBoard[i + 1][columnNumber] != null) {
                 gameBoard[i][columnNumber] = disc;
 
-                // Check If Newly Inserted Disc Prompted a Win for the Player
+                // Check if Newly Inserted Disc Prompted a Win for the Player
                 return checkWin(i, columnNumber, getTurnPlayer());
             }
         }
 
-        // Insert Disc - an Entire Column is Empty, No Disc Exists Yet
+        // The Entire Column is Empty - No Discs Exist Yet
+        // Insert the Disc & Check if Newly Inserted Disc Prompted a Win for the Player
         gameBoard[numberOfRows - 1][columnNumber] = disc;
         return checkWin(numberOfRows - 1, columnNumber, getTurnPlayer());
 
@@ -118,9 +132,10 @@ public class Game {
     // Check if 4 Discs are Consecutively Aligned from 7 Directions
     public boolean checkWin(int rowNumber, int columnNumber, Player turnPlayer) {
 
+        // True if a Win is Detected
         boolean win = false;
 
-        // 7 Directions a Player Can Win
+        // Check for a Win in 7 Different Directions
         if (checkWinDown(rowNumber, columnNumber, turnPlayer)) {
             win = true;
         } else if (checkWinLeft(rowNumber, columnNumber, turnPlayer)) {
@@ -148,7 +163,7 @@ public class Game {
         // Top to Bottom: Increment Row #, Same Column #
         for (int i = rowNumber; i < numberOfRows; i++) {
 
-            // Increment Count if Disc Belongs to the Same Player
+            // Increment Count if the Disc Belongs to the Same Player
             if (gameBoard[i][columnNumber].getPlayer() == turnPlayer) {
                 count++;
 
@@ -173,7 +188,7 @@ public class Game {
                 break;
             }
 
-            // Increment Count if Disc Belongs to the Same Player
+            // Increment Count if the Disc Belongs to the Same Player
             if (gameBoard[rowNumber][i].getPlayer() == turnPlayer) {
                 count++;
                 if (count == 4) {
@@ -198,7 +213,7 @@ public class Game {
                 break;
             }
 
-            // Increment Count if Disc Belongs to the Same Player
+            // Increment Count if the Disc Belongs to the Same Player
             if (gameBoard[rowNumber][i].getPlayer() == turnPlayer) {
                 count++;
                 if (count == 4) {
@@ -222,7 +237,7 @@ public class Game {
                 break;
             }
 
-            // Increment Count if Disc Belongs to the Same Player
+            // Increment Count if the Disc Belongs to the Same Player
             if (gameBoard[i][j].getPlayer() == turnPlayer) {
                 count++;
                 if (count == 4) {
@@ -246,7 +261,7 @@ public class Game {
                 break;
             }
 
-            // Increment Count if Disc Belongs to the Same Player
+            // Increment Count if the Disc Belongs to the Same Player
             if (gameBoard[i][j].getPlayer() == turnPlayer) {
                 count++;
                 if (count == 4) {
@@ -270,7 +285,7 @@ public class Game {
                 break;
             }
 
-            // Increment Count if Disc Belongs to the Same Player
+            // Increment Count if the Disc Belongs to the Same Player
             if (gameBoard[i][j].getPlayer() == turnPlayer) {
                 count++;
                 if (count == 4) {
@@ -294,7 +309,7 @@ public class Game {
                 break;
             }
 
-            // Increment Count if Disc Belongs to the Same Player
+            // Increment Count if the Disc Belongs to the Same Player
             if (gameBoard[i][j].getPlayer() == turnPlayer) {
                 count++;
                 if (count == 4) {

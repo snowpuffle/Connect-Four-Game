@@ -6,6 +6,6 @@ public class PlayerOneDisc extends Disc {
     }
 
     public String toString() {
-        return "1";
+        return "X";
     }
 }
