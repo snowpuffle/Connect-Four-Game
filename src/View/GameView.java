@@ -12,18 +12,20 @@ public class GameView {
 
     Scanner scanner;
 
+    // Class Constructor
     public GameView() {
         scanner = new Scanner(System.in);
     }
 
+    // Create New Game
     public Game makeGame() {
         System.out.println("Welcome to Connect Four!");
         System.out.println("************************************************************************");
 
-        System.out.println("Name of Player One: ");
+        System.out.print("Name of Player One: ");
         String playerOneName = scanner.nextLine();
 
-        System.out.println("Name of Player Two: ");
+        System.out.print("Name of Player Two: ");
         String playerTwoName = scanner.nextLine();
 
         Player playerOne = new Player(playerOneName.toUpperCase(), PlayerType.PLAYER_ONE);
@@ -34,6 +36,7 @@ public class GameView {
         return game;
     }
 
+    // Print & Format the Game Board
     public void printGameBoard(Game game) {
         System.out.println("************************************************************");
         for (Disc[] row : game.getBoard()) {
@@ -49,11 +52,15 @@ public class GameView {
         }
     }
 
+    // Get & Validate Input from the Turn Player
     public int playTurn(String playerName) throws NumberFormatException {
-        System.out.println("It is " + playerName + "'s Turn. Write Column Number: ");
-        int columnToInsert;
 
+        // Get Input from the Turn Player
+        System.out.print("It is " + playerName + "'s Turn. Write Column Number: ");
         String input = scanner.nextLine();
+
+        // Validate Input from the Turn Player
+        int columnToInsert;
         try {
             columnToInsert = Integer.parseInt(input);
         } catch (NumberFormatException e) {

@@ -11,26 +11,41 @@ public class Game {
     final int numberOfColumns = 7;
     boolean turn;
 
+    // Class Constructor
     public Game(Player playerOne, Player playerTwo) {
+
+        // Create PlayerOne and PlayerTwo
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
+
+        // Randomize "Who Goes First?"
         randomizePlayers();
+
+        // Create 6 x 7 Array of Discs
         gameBoard = new Disc[numberOfRows][numberOfColumns];
     }
 
+    // End the Game if All Columns are Full
     public boolean isEndGame() {
+
+        // Loop through all Columns
         for (int i = 0; i < numberOfColumns; i++) {
+
+            // Check for Discs on the Top Row
             if (gameBoard[0][i] == null) {
                 return false;
             }
         }
-        return true;
+        return true; // Game Ends - All Columns are Full
     }
 
+    // Randomize "Who Goes First?"
     public void randomizePlayers() {
+        // Use Math Random
         double randomNumber = Math.random();
         Player tempPlayer;
 
+        // Assign Who Goes First Based on Random Number
         if (randomNumber >= 0 && randomNumber < 0.5) {
             tempPlayer = playerOne;
             playerOne = playerTwo;
@@ -38,10 +53,12 @@ public class Game {
         }
     }
 
+    // End of Turn for the Player
     public void endTurn() {
         turn = !turn;
     }
 
+    // Get Turn Player
     public Player getTurnPlayer() {
         if (turn) {
             return playerTwo;
@@ -50,64 +67,45 @@ public class Game {
         }
     }
 
+    // Get the Game Board
     public Disc[][] getBoard() {
         return gameBoard;
     }
 
+    // Set the Game Board
     public void setBoard(Disc[][] gameBoard) {
         this.gameBoard = gameBoard;
     }
 
-    // Check if 4 Discs are Consecutively Aligned from 7 Directions
-    public boolean checkWin(int rowNumber, int columnNumber, Player turnPlayer) {
-
-        // 7 Directions a Player Can Win
-        if (checkWinDown(rowNumber, columnNumber, turnPlayer)) {
-            return true;
-        } else if (checkWinLeft(rowNumber, columnNumber, turnPlayer)) {
-            return true;
-        } else if (checkWinRight(rowNumber, columnNumber, turnPlayer)) {
-            return true;
-        } else if (checkWinDownRight(rowNumber, columnNumber, turnPlayer)) {
-            return true;
-        } else if (checkWinDownLeft(rowNumber, columnNumber, turnPlayer)) {
-            return true;
-        } else if (checkWinUpRight(rowNumber, columnNumber, turnPlayer)) {
-            return true;
-        } else if (checkWinUpLeft(rowNumber, columnNumber, turnPlayer)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    // Insert Disc & Throw Exceptions if Necessary
     public boolean insertDisc(int columnNumber) throws ColumnFullException, InvalidColumnException {
-        Disc disc;
-
-        // Create Disc Object Based on Turn Player
+        // Create New Disc Object Based on Turn Player
+        Disc disc;     
         if (getTurnPlayer().getPlayerType() == PlayerType.PLAYER_ONE) {
             disc = new PlayerOneDisc(getTurnPlayer());
         } else {
             disc = new PlayerTwoDisc(getTurnPlayer());
         }
 
-        // Throw Exception if Invalid Column
+        // Throw an Exception if Column Input is Invalid
         if (columnNumber >= numberOfColumns || columnNumber < 0) {
             throw new InvalidColumnException();
         }
 
-        // Throw Exception if Column if Full
+        // Throw an Exception if Column Input if Full
         if (gameBoard[0][columnNumber] != null) {
             throw new ColumnFullException();
         }
 
-        // Insert Disc and Check for Win
+        // Insert Disc and Check for a Win
         for (int i = 0; i < numberOfRows - 1; i++) {
 
             // Insert Disc if a Disc Exists Below
             if (gameBoard[i + 1][columnNumber] != null) {
                 gameBoard[i][columnNumber] = disc;
-                return checkWin(numberOfRows, columnNumber, getTurnPlayer());
+
+                // Check If Newly Inserted Disc Prompted a Win for the Player
+                return checkWin(i, columnNumber, getTurnPlayer());
             }
         }
 
@@ -115,6 +113,31 @@ public class Game {
         gameBoard[numberOfRows - 1][columnNumber] = disc;
         return checkWin(numberOfRows - 1, columnNumber, getTurnPlayer());
 
+    }
+
+    // Check if 4 Discs are Consecutively Aligned from 7 Directions
+    public boolean checkWin(int rowNumber, int columnNumber, Player turnPlayer) {
+
+        boolean win = false;
+
+        // 7 Directions a Player Can Win
+        if (checkWinDown(rowNumber, columnNumber, turnPlayer)) {
+            win = true;
+        } else if (checkWinLeft(rowNumber, columnNumber, turnPlayer)) {
+            win = true;
+        } else if (checkWinRight(rowNumber, columnNumber, turnPlayer)) {
+            win = true;
+        } else if (checkWinDownRight(rowNumber, columnNumber, turnPlayer)) {
+            win = true;
+        } else if (checkWinDownLeft(rowNumber, columnNumber, turnPlayer)) {
+            win = true;
+        } else if (checkWinUpRight(rowNumber, columnNumber, turnPlayer)) {
+            win = true;
+        } else if (checkWinUpLeft(rowNumber, columnNumber, turnPlayer)) {
+            win = true;
+        }
+
+        return win;
     }
 
     // Check if 4 Discs are Consecutively Aligned from Top to Bottom Direction
@@ -128,6 +151,7 @@ public class Game {
             // Increment Count if Disc Belongs to the Same Player
             if (gameBoard[i][columnNumber].getPlayer() == turnPlayer) {
                 count++;
+
                 if (count == 4) {
                     return true;
                 }
