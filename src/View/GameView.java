@@ -110,4 +110,10 @@ public class GameView {
         System.out.println("ERROR: " + response);
     }
 
+    // Display Game Result
+    public void displayGameResult(String response) {
+        System.out.println("\n~ End of Game ~");
+        System.out.println(response);
+    }
+
 }
