@@ -3,90 +3,111 @@ package View;
 import java.util.Scanner;
 import java.util.StringJoiner;
 
+import Controller.GameController;
 import Model.Disc;
-import Model.Game;
+import Model.GameBoard;
+import Model.GameCell;
 import Model.Player;
 import Model.PlayerType;
 
 public class GameView {
 
     Scanner scanner;
+    private GameController gameController;
 
     // Class Constructor
     public GameView() {
         scanner = new Scanner(System.in);
     }
 
-    // Create New Players and Game
-    public Game makeGame() {
-        
-        // Introduction
-        System.out.println("Welcome to Connect Four!");
-        System.out.println("************************************************************************");
+    // Initialize Game View
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+    }
 
-        // Get the Player's Names
-        System.out.print("Name of Player One: ");
+    // Create New Players and Game
+    public String[] displayGetPlayers() {
+
+        // Get the Player's names
+        System.out.print("Enter Name of Player One: ");
         String playerOneName = scanner.nextLine();
-        System.out.print("Name of Player Two: ");
+        System.out.print("Enter Name of Player Two: ");
         String playerTwoName = scanner.nextLine();
 
-        // Create the Players
-        Player playerOne = new Player(playerOneName, PlayerType.PLAYER_ONE);
-        Player playerTwo = new Player(playerTwoName, PlayerType.PLAYER_TWO);
+        // Combine Player's names to return
+        String[] namesOfPlayers = new String[] { playerOneName, playerTwoName };
 
-        // Create the Game
-        Game game = new Game(playerOne, playerTwo);
-
-        return game;
+        return namesOfPlayers;
     }
 
     // Print & Format the Game Board
-    public void printGameBoard(Game game) {
-        System.out.println("************************************************************************");
-        for (int i = 0; i < game.getNumberOfRows(); i++) {
-            if (i == 0) {
-                System.out.print("    ");
-            } else {
-                System.out.print(i + "   ");
-            }
+    public void printGameBoard(GameCell[][] gameBoard) {
 
+        System.out.println("\n~ Game Board ~");
+        System.out.print("   ");
+        for (int i = 1; i <= gameBoard.length + 1; i++) {
+            System.out.print(i + "     ");
         }
+
+        // Create the Top, Bottom, & Mid-Boundary
+        StringBuilder topBottomBoundary = new StringBuilder("");
+        for (int i = 0; i < gameBoard.length + 1; ++i) {
+            topBottomBoundary.append("+-----");
+        }
+        topBottomBoundary.append("+");
+
+        // Display the Top and Bottom-Boundaries
         System.out.println();
-        for (Disc[] row : game.getBoard()) {
-            StringJoiner sj = new StringJoiner(" | ");
-            for (Disc col : row) {
-                if (col == null) {
-                    sj.add(" ");
+        System.out.println(topBottomBoundary);
+
+        // Loop through every Row in Game Board
+        for (GameCell[] row : gameBoard) {
+
+            // Loop through every Game Cell in Row
+            for (GameCell cell : row) {
+
+                // Display Position Number if no Checker is placed
+                // Else, display the Checker Mark
+                if (cell.getDisc() == null) {
+                    System.out.print("|     ");
                 } else {
-                    sj.add(col.toString());
+                    System.out.print("|  " + cell.getDisc().toString() + "  ");
                 }
             }
-            System.out.println(sj.toString());
+            System.out.println("|");
         }
+
+        // Display the Bottom Boundary
+        System.out.println(topBottomBoundary);
     }
 
-    // Get & Validate Input from the Turn Player
-    public int playTurn(String playerName) throws NumberFormatException {
+    // Display Game Introduction
+    public void displayGameIntro() {
+        // Display welcome introduction
+        System.out.println("\n~ Welcome to Connect-Four Game! ~\n");
+    }
 
-        // Get Input from the Turn Player
-        System.out.println("************************************************************************");
-        System.out.print("It is " + playerName + "'s Turn. Write Column Number: ");
-        String input = scanner.nextLine();
-
-        // Validate Input from the Turn Player
-        int columnToInsert;
+    // Display Get Play Turn
+    public int displayGetPlayTurn(Player playerTurn) {
         try {
-            columnToInsert = Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException("Invalid Input.");
-        }
+            System.out.println("~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+            System.out.print("It is " + playerTurn.getPlayerName() + "'s Turn. ");
 
-        // Validate Input is 1 >= X >= 5
-        if (columnToInsert >= 1 && columnToInsert <= 5) {
+            // Get row number from Player
+            System.out.print("Enter Column Number: ");
+            int columnToInsert = scanner.nextInt() - 1;
+
             return columnToInsert;
-        } else {
-            return -1;
+
+        } catch (Exception e) {
+            System.out.println("ERROR: Invalid Input.");
         }
+        return -1;
+    }
+
+    // Display Play Turn Response
+    public void displayPlayTurnResponse(String response) {
+        System.out.println("ERROR: " + response);
     }
 
 }
