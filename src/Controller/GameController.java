@@ -300,13 +300,13 @@ public class GameController {
             win = true;
         } else if (checkWinLeftRight(rowNumber, columnNumber, turnPlayer)) {
             win = true;
-        } else if (checkWinTopLeftBottomRight(rowNumber, columnNumber, turnPlayer)) {
+        } else if (checkWinTopLeftBottomRightA(rowNumber, columnNumber, turnPlayer)) {
             win = true;
-        } else if (checkWinBottomLeftTopRight(rowNumber, columnNumber, turnPlayer)) {
+        } else if (checkWinTopLeftBottomRightB(rowNumber, columnNumber, turnPlayer)) {
             win = true;
-        } else if (checkWinTopRightBottomLeft(rowNumber, columnNumber, turnPlayer)) {
+        } else if (checkWinBottomLeftTopRightA(rowNumber, columnNumber, turnPlayer)) {
             win = true;
-        } else if (checkWinBottomRightTopLeft(rowNumber, columnNumber, turnPlayer)) {
+        } else if (checkWinBottomLeftTopRightB(rowNumber, columnNumber, turnPlayer)) {
             win = true;
         }
 
@@ -316,11 +316,12 @@ public class GameController {
     // Check for Win from Top to Bottom Direction
     public boolean checkWinTopDown(int rowNumber, int columnNumber, Player turnPlayer) {
         // Player Wins if Count = 4
-        int count = 1;
+        int count = 0;
 
-        // Top to Bottom: Increment Row #, Same Column #
-        for (int i = 0; i < numberOfRows; ++i) {
+        // Loop through every Row
+        for (int i = 0; i < numberOfRows; i++) {
 
+            // Get the Game Cells in every Row in the Column
             GameCell gameCell = gameBoard.getGameBoard()[i][columnNumber];
 
             // Continue only if Disc is NOT Null
@@ -331,6 +332,7 @@ public class GameController {
 
                     // Check Player's Disc Count
                     if (count == 4) {
+                        System.out.println("Win Vertical!");
                         return true;
                     }
                     count++;
@@ -348,24 +350,27 @@ public class GameController {
         // Player Wins if Count = 4
         int count = 0;
 
-        // Right to Left: Same Row #, Decrement Column #
+        // Loop through every Column from Right to Left, starting from the Last Column
         for (int i = numberOfColumns - 1; i >= 0; i--) {
+
+            // Get the Game Cells in every Column in the Insert Row
             GameCell gameCell = gameBoard.getGameBoard()[rowNumber][i];
 
             // Check if Game Cell is NULL at the Last Column
             if (i == numberOfColumns - 1 && gameCell.getDisc() == null) {
-                // System.out.println(" LAST COLUMN, COUNT = 0");
+                // Reset Count
                 count = 0;
             } else {
-                // Break if there is a Space Between the Discs
                 // Continue only if Disc is NOT Null
                 if (gameCell.getDisc() == null) {
+                    // Break if there is a Space Between the Discs
                     break;
                 } else {
                     // Increment Count if the Disc Belongs to the Same Player
                     if (gameCell.getDisc().getPlayer() == turnPlayer) {
                         count++;
                         if (count == 4) {
+                            System.out.println("Win Horizontal RL!");
                             return true;
                         }
                     } else {
@@ -382,24 +387,27 @@ public class GameController {
         // Player Wins if Count = 4
         int count = 0;
 
-        // Left to Right: Same Row #, Increment Column #
+        // Loop through every Column from Left to Right, starting from the First Column
         for (int i = 0; i < numberOfColumns; i++) {
+
+            // Get the Game Cells in every Column in the Insert Row
             GameCell gameCell = gameBoard.getGameBoard()[rowNumber][i];
 
             // Check if Game Cell is NULL at the First Column
             if (i == 0 && gameCell.getDisc() == null) {
-                // System.out.println(" FIRST COLUMN, BREAK");
+                // Reset Count
                 count = 0;
             } else {
-                // Break if there is a Space Between the Discs
                 // Continue only if Disc is NOT Null
                 if (gameCell.getDisc() == null) {
+                    // Break if there is a Space Between the Discs
                     break;
                 } else {
                     // Increment Count if the Disc Belongs to the Same Player
                     if (gameCell.getDisc().getPlayer() == turnPlayer) {
                         count++;
                         if (count == 4) {
+                            System.out.println("Win Horizontal LR!");
                             return true;
                         }
                     } else {
@@ -411,121 +419,163 @@ public class GameController {
         return false;
     }
 
-    // Check for Win from Top-Left to Bottom-Right Direction
-    public boolean checkWinTopLeftBottomRight(int rowNumber, int columnNumber, Player turnPlayer) {
+    // Check for Win from Top-Left to Bottom-Right (including Middle)
+    public boolean checkWinTopLeftBottomRightA(int rowNumber, int columnNumber, Player turnPlayer) {
         // Player Wins if Count = 4
         int count = 0;
 
-        // Top-Left to Bottom-Right: Increment Row #, Increment Column #
-        for (int i = rowNumber, j = columnNumber; i >= 0 && i < numberOfRows && j >= 0
-                && j < numberOfColumns; i++, j++) {
+        // Loop through the Rows
+        for (int row = 0; row <= numberOfRows - 4; row++) {
 
-            GameCell gameCell = gameBoard.getGameBoard()[i][j];
+            // Set Row Position
+            int rowPosition = row;
 
-            // Break if there is a Space Between the Discs
-            // Continue only if Disc is NOT Null
-            if (gameCell.getDisc() == null) {
-                break;
-            } else {
-                // Increment Count if the Checker Belongs to the Same Player
-                if (gameCell.getDisc().getPlayer() == turnPlayer) {
-                    count++;
-                    if (count == 4) {
-                        return true;
-                    }
+            // Loop through the Columns
+            for (int column = 0; column < numberOfColumns && rowPosition < numberOfRows; column++) {
+
+                // Get the Game Cell in the Diagonal line
+                GameCell gameCell = gameBoard.getGameBoard()[rowPosition][column];
+
+                // Reset Count if Disc is NULL
+                if (gameCell.getDisc() == null) {
+                    count = 0;
                 } else {
-                    break;
+                    // Increment Count if the Checker Belongs to the Same Player
+                    if (gameCell.getDisc().getPlayer() == turnPlayer) {
+                        count++;
+                    } else {
+                        count = 0;
+                    }
                 }
+
+                // Check if Count reaches Win Number
+                if (count == 4) {
+                    System.out.println("Win LR Diagonal Include Middle!");
+                    return true;
+                }
+                rowPosition++;
+            }
+
+        }
+        return false;
+    }
+
+    // Check for Win from Top Left to Bottom Right (After Middle)
+    public boolean checkWinTopLeftBottomRightB(int rowNumber, int columnNumber, Player turnPlayer) {
+
+        // Player Wins if Count = 4
+        int count = 0;
+
+        // Loop through the Columns
+        for (int column = 1; column <= numberOfColumns - 4; column++) {
+
+            // Set Column Position
+            int columnPosition = column;
+
+            // Loop through the Rows
+            for (int row = 0; row < numberOfRows && columnPosition < numberOfColumns; row++) {
+
+                // Get the Game Cell in the Diagonal line
+                GameCell gameCell = gameBoard.getGameBoard()[row][columnPosition];
+
+                // Reset Count if Disc is NULL
+                if (gameCell.getDisc() == null) {
+                    count = 0;
+                } else {
+                    // Increment Count if the Disc Belongs to the Same Player
+                    if (gameCell.getDisc().getPlayer() == turnPlayer) {
+                        count++;
+                    } else {
+                        count = 0;
+                    }
+                }
+
+                // Check if Count reaches Win Number
+                if (count == 4) {
+                    System.out.println("Win LR Diagonal After Middle!");
+                    return true;
+                }
+                columnPosition++;
             }
         }
         return false;
     }
 
-    // Check for Win Top-Right to Bottom-Left Direction
-    public boolean checkWinTopRightBottomLeft(int rowNumber, int columnNumber, Player turnPlayer) {
+    // Check for Win from Bottom-Left to Top-Right (including Middle)
+    public boolean checkWinBottomLeftTopRightA(int rowNumber, int columnNumber, Player turnPlayer) {
+
         // Player Wins if Count = 4
         int count = 0;
 
-        // Top-Right to Bottom-Left: Increment Row #, Decrement Column #
-        for (int i = rowNumber, j = columnNumber; i >= 0 && i < numberOfRows && j >= 0
-                && j < numberOfColumns; i++, j--) {
+        // Loop through the Rows
+        for (int row = numberOfRows - 1; row >= numberOfRows - 4; row--) {
 
-            GameCell gameCell = gameBoard.getGameBoard()[i][j];
+            // Set Row Position
+            int rowPosition = row;
 
-            // Break if there is a Space Between the Discs
-            // Continue only if Disc is NOT Null
-            if (gameCell.getDisc() == null) {
-                break;
-            } else {
-                // Increment Count if the Checker Belongs to the Same Player
-                if (gameCell.getDisc().getPlayer() == turnPlayer) {
-                    count++;
-                    if (count == 4) {
-                        return true;
-                    }
+            // Loop through the Columns
+            for (int column = 0; column < numberOfColumns && rowPosition < numberOfRows && rowPosition >= 0; column++) {
+
+                // Get the Game Cell in the Diagonal line
+                GameCell gameCell = gameBoard.getGameBoard()[rowPosition][column];
+
+                // Reset Count if Disc is NULL
+                if (gameCell.getDisc() == null) {
+                    count = 0;
                 } else {
-                    break;
+                    // Increment Count if the Disc Belongs to the Same Player
+                    if (gameCell.getDisc().getPlayer() == turnPlayer) {
+                        count++;
+                    } else {
+                        count = 0;
+                    }
                 }
+
+                // Check if Count reaches Win Number
+                if (count == 4) {
+                    return true;
+                }
+                rowPosition--;
             }
         }
         return false;
     }
 
-    // Check for Win Bottom-Left to Top-Right Direction
-    public boolean checkWinBottomLeftTopRight(int rowNumber, int columnNumber, Player turnPlayer) {
+    // Check for Win from Bottom-Left to Top-Right (After Middle)
+    public boolean checkWinBottomLeftTopRightB(int rowNumber, int columnNumber, Player turnPlayer) {
+
         // Player Wins if Count = 4
         int count = 0;
 
-        // Bottom-Left to Top-Right: Decrement Row #, Increment Column #
-        for (int i = rowNumber, j = columnNumber; i >= 0 && i < numberOfRows && j >= 0
-                && j < numberOfColumns; i--, j++) {
+        // Loop through the Rows
+        for (int column = 1; column < numberOfColumns; column++) {
 
-            GameCell gameCell = gameBoard.getGameBoard()[i][j];
+            // Set Row Position
+            int columnPosition = column;
 
-            // Break if there is a Space Between the Discs
-            // Continue only if Disc is NOT Null
-            if (gameCell.getDisc() == null) {
-                break;
-            } else {
-                // Increment Count if the Checker Belongs to the Same Player
-                if (gameCell.getDisc().getPlayer() == turnPlayer) {
-                    count++;
-                    if (count == 4) {
-                        return true;
-                    }
+            // Loop through the Columns
+            for (int row = numberOfRows - 1; row < numberOfRows && columnPosition < numberOfColumns && columnPosition >= 1; row--) {
+
+                // Get the Game Cell in the Diagonal line
+                GameCell gameCell = gameBoard.getGameBoard()[row][columnPosition];
+
+                // Reset Count if Disc is NULL
+                if (gameCell.getDisc() == null) {
+                    count = 0;
                 } else {
-                    break;
-                }
-            }
-        }
-        return false;
-    }
-
-    // Check for Win Bottom Right to Top Left Direction
-    public boolean checkWinBottomRightTopLeft(int rowNumber, int columnNumber, Player turnPlayer) {
-        // Player Wins if Count = 4
-        int count = 0;
-
-        // Bottom Right to Top Left: Decrement Row #, Decrement Column #
-        for (int i = rowNumber, j = columnNumber; i >= 0 && i < numberOfRows && j >= 0
-                && j < numberOfColumns; i--, j--) {
-
-            GameCell gameCell = gameBoard.getGameBoard()[i][j];
-
-            // Break if there is a Space Between the Discs
-            // Continue only if Disc is NOT Null
-            if (gameCell.getDisc() == null) {
-                break;
-            } else {
-                // Increment Count if the Checker Belongs to the Same Player
-                if (gameCell.getDisc().getPlayer() == turnPlayer) {
-                    count++;
-                    if (count == 4) {
-                        return true;
+                    // Increment Count if the Disc Belongs to the Same Player
+                    if (gameCell.getDisc().getPlayer() == turnPlayer) {
+                        count++;
+                    } else {
+                        count = 0;
                     }
-                } else {
-                    break;
                 }
+
+                // Check if Count reaches Win Number
+                if (count == 4) {
+                    return true;
+                }
+                columnPosition++;
             }
         }
         return false;
