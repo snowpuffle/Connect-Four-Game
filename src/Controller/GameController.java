@@ -1,7 +1,5 @@
 package Controller;
 
-import Exceptions.ColumnFullException;
-import Exceptions.InvalidColumnException;
 import Model.Disc;
 import Model.GameBoard;
 import Model.GameCell;
@@ -36,60 +34,8 @@ public class GameController {
         this.numberOfColumns = gameBoard.getNumberOfColumns();
     }
 
-    // public GameController(GameBoard gameBoard, GameView gameView) {
-
-    // // Create Game View & Make New Game
-    // this.gameView = new GameView();
-    // this.gameBoard = gameView.makeGame();
-
-    // boolean isEndGame = false;
-
-    // // Loop until the Game is Over or Encounters an Error
-    // while (true) {
-    // // Is the Game Over?
-    // if (getGame().isEndGame()) {
-    // isEndGame = true;
-    // break;
-    // }
-
-    // // Print the Game Board
-    // gameView.printGameBoard(getGame());
-
-    // // Try to Convert Column Input to an Integer
-    // int columnToInsert = -1;
-    // try {
-    // columnToInsert = gameView.playTurn(game.getTurnPlayer().getPlayerName());
-    // } catch (NumberFormatException e) {
-    // System.out.println("ERROR: Invalid Number Format!");
-    // }
-
-    // // Try to Insert the Disc
-    // try {
-    // if (getGame().insertDisc(columnToInsert)) {
-    // break;
-    // }
-    // // End the Player's Turn if Disc Insertion is Successful
-    // getGame().endTurn();
-    // } catch (ColumnFullException e1) {
-    // System.out.println("ERROR: Column is Full!");
-    // } catch (InvalidColumnException e2) {
-    // System.out.println("ERROR: Invalid Column!");
-    // }
-    // }
-
-    // // End of Game
-    // if (isEndGame) {
-    // System.out.println("Game Ended with No Winner!");
-    // } else {
-    // gameView.printGameBoard(getGame());
-    // System.out.println("************************************************************************");
-    // System.out.println(getGame().getTurnPlayer().getPlayerName() + " Has Won!");
-    // System.out.println("************************************************************************");
-    // }
-    // }
-
     /* ~ Main Game Play Methods ~ */
-    // 1. Prepare the Game
+    // 1. Prepare the Game: Introduction & Set Up  Players
     public void prepareGame() {
 
         // Display Game Introduction
@@ -114,6 +60,7 @@ public class GameController {
 
         // Loop until Game is Over
         while (true) {
+
             // Is the Game Over?
             if (isEndGame()) {
                 isEndGame = true;
@@ -129,20 +76,29 @@ public class GameController {
             // Turn Player plays Turn
             boolean isCheckerPlaced = playTurn(turnPlayer);
 
-            // Increment number of Checkers and end Turn if there is No Winner
             // Break and end Game if there is a Winner
             if (isCheckerPlaced && winPlayer == null) {
+
+                // Increment number of Discs and end Turn if there is No Winner
                 numberOfDiscsPlaced++;
                 endTurn();
+
             } else if (isCheckerPlaced && winPlayer != null) {
+
+                // Break if there is a Winner
                 break;
             }
         }
 
         // Display End of Game
         if (isEndGame) {
+
+            // Game ends with a No Winners
             gameView.displayGameResult("It's a Tie!");
+
         } else {
+
+            // Game ends with a Winner
             gameView.printGameBoard(gameBoard.getGameBoard());
             gameView.displayGameResult(winPlayer.getPlayerName() + " Has Won!");
         }
@@ -150,7 +106,7 @@ public class GameController {
     }
 
     /* ~ Game Play Helper Methods ~ */
-    // Play Turn
+    // Play Turn: Insert Disc & Check for a Win
     public boolean playTurn(Player turnPlayer) {
 
         // Display Play Turn & Get Position
@@ -164,32 +120,35 @@ public class GameController {
 
         // Continue if the Position is Valid
         if (!isValidColumn) {
+
             // Send Error Response to Game View
             gameView.displayPlayTurnResponse("Input Position is Invalid.");
             isDiscPlaced = false;
+
         } else {
-            // Create Checker based on Player Type
-            Disc checker = createDisc(turnPlayer);
 
-            // Place the Checker onto the GameBoard
-            int[] discPosition = insertDisc(checker, columnToInsert);
+            // Create Disc based on Player Type
+            Disc disc = createDisc(turnPlayer);
 
-            // Continue only if Checker is Placed
+            // Place the Disc onto the GameBoard
+            int[] discPosition = insertDisc(disc, columnToInsert);
+
+            // Continue only if Disc is Placed
             if (discPosition[0] == -1 || discPosition[1] == -1) {
+                
+                // Send Error Response to Game View
                 gameView.displayPlayTurnResponse("Disc Cannot be Placed. Try Again!");
                 isDiscPlaced = false;
+
             } else {
                 // Set Disc is Placed
                 isDiscPlaced = true;
 
-                // Check if the Placed Checker is the Winning Move
-                boolean isWinningMove = checkForWin(discPosition[0],
-                        discPosition[1], turnPlayer);
+                // Check if the Placed Disc is the Winning Move
+                if (checkForWin(discPosition[0],
+                        discPosition[1], turnPlayer)) {
 
-                System.out.print(isWinningMove);
-
-                // Set Winning Player
-                if (isWinningMove) {
+                    // Set Winning PlayerF
                     winPlayer = turnPlayer;
 
                 } else {
@@ -554,7 +513,8 @@ public class GameController {
             int columnPosition = column;
 
             // Loop through the Columns
-            for (int row = numberOfRows - 1; row < numberOfRows && columnPosition < numberOfColumns && columnPosition >= 1; row--) {
+            for (int row = numberOfRows - 1; row < numberOfRows && columnPosition < numberOfColumns
+                    && columnPosition >= 1; row--) {
 
                 // Get the Game Cell in the Diagonal line
                 GameCell gameCell = gameBoard.getGameBoard()[row][columnPosition];

@@ -1,14 +1,10 @@
 package View;
 
 import java.util.Scanner;
-import java.util.StringJoiner;
 
 import Controller.GameController;
-import Model.Disc;
-import Model.GameBoard;
 import Model.GameCell;
 import Model.Player;
-import Model.PlayerType;
 
 public class GameView {
 
@@ -31,6 +27,7 @@ public class GameView {
         // Get the Player's names
         System.out.print("Enter Name of Player One: ");
         String playerOneName = scanner.nextLine();
+
         System.out.print("Enter Name of Player Two: ");
         String playerTwoName = scanner.nextLine();
 
