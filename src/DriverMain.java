@@ -10,7 +10,6 @@ public class DriverMain {
         // Create & Initialize Controller & View
         GameView gameView = new GameView();
         GameController gameController = new GameController(gameBoard, gameView);
-        gameView.setGameController(gameController);
 
         // 1. Prepare the Game
         gameController.prepareGame();

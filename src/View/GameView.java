@@ -2,23 +2,17 @@ package View;
 
 import java.util.Scanner;
 
-import Controller.GameController;
 import Model.GameCell;
 import Model.Player;
 
+/* Game View Class: Main View of Game */
 public class GameView {
 
     Scanner scanner;
-    private GameController gameController;
 
     // Class Constructor
     public GameView() {
         scanner = new Scanner(System.in);
-    }
-
-    // Initialize Game View
-    public void setGameController(GameController gameController) {
-        this.gameController = gameController;
     }
 
     // Create New Players and Game
@@ -109,6 +103,7 @@ public class GameView {
 
     // Display Game Result
     public void displayGameResult(String response) {
+        System.out.println("~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
         System.out.println("\n~ End of Game ~");
         System.out.println(response);
     }

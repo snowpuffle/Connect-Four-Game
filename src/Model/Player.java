@@ -1,15 +1,17 @@
 package Model;
 
+/* ~ Player Class ~ */
 public class Player {
     private PlayerType playerType;
     private String playerName;
 
+    // Class Constructor
     public Player(String playerName, PlayerType playerType) {
         this.playerName = playerName;
         this.playerType = playerType;
     }
 
-    // Setter and Getter Methods
+    /* ~ Getter & Setter Methods ~ */
     public PlayerType getPlayerType() {
         return playerType;
     }

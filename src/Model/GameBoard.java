@@ -1,11 +1,13 @@
 package Model;
 
+/* ~ Game Board Class ~ */
 public class GameBoard {
 
-    // Define Class Variables
+    // Game Board is an Array of Game Cells
     GameCell[][] gameBoard;
     boolean turn;
 
+    // Size of the GameBoard
     private static final int numberOfRows = 6;
     private static final int numberOfColumns = 7;
 
@@ -23,17 +25,15 @@ public class GameBoard {
         }
     }
 
-    // Get the Game Board
+    /* ~ Getter Methods ~ */
     public GameCell[][] getGameBoard() {
         return gameBoard;
     }
 
-    // Get the Number of Rows
     public int getNumberOfRows() {
         return numberOfRows;
     }
 
-    // Get the Number of Columns
     public int getNumberOfColumns() {
         return numberOfColumns;
     }

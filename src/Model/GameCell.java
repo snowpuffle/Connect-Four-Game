@@ -1,6 +1,6 @@
 package Model;
 
-/* Game Cell Class: A Unit Cell on GameBoard */
+/* ~ Game Cell Class: A Unit Cell on GameBoard ~ */
 public class GameCell {
     private Disc disc;
 

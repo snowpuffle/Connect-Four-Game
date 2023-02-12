@@ -52,7 +52,7 @@ public class GameController {
         randomizePlayers();
     }
 
-    // 2. Play the Game
+    // 2. Play the Game: Loop Until Game Ends
     public void playGame() {
 
         // Set Flag
@@ -159,7 +159,7 @@ public class GameController {
         return isDiscPlaced;
     }
 
-    // Get Turn Player
+    // Get Turn Player: Return "Who's Turn is it?"
     public Player getTurnPlayer() {
         if (turn) {
             return playerTwo;
@@ -168,12 +168,12 @@ public class GameController {
         }
     }
 
-    // End of Turn for the Player
+    // End Turn for the Player
     public void endTurn() {
         turn = !turn;
     }
 
-    // End the Game if All Columns are Full
+    // End the Game: Return "Is the Game Board Full?""
     public boolean isEndGame() {
 
         // Calculate the Maximum number of Checkers possible for the Game Board
@@ -187,7 +187,7 @@ public class GameController {
         }
     }
 
-    /* ~ Disc Management Methods~ */
+    /* ~ Disc Management Methods ~ */
     // Create and Return Disc based on the Turn Player
     public Disc createDisc(Player turnPlayer) {
 
@@ -246,7 +246,7 @@ public class GameController {
         return discPosition;
     }
 
-    /* Check for Win Methods */
+    /* ~ Check for Win Methods ~ */
     // Check for the Winning Move
     public boolean checkForWin(int rowNumber, int columnNumber, Player turnPlayer) {
         // True if a Win is Detected
@@ -272,7 +272,7 @@ public class GameController {
         return win;
     }
 
-    // Check for Win from Top to Bottom Direction
+    // Check for Win: Top to Bottom Direction
     public boolean checkWinTopDown(int rowNumber, int columnNumber, Player turnPlayer) {
         // Player Wins if Count = 4
         int count = 0;
@@ -304,7 +304,7 @@ public class GameController {
         return false;
     }
 
-    // Check for Win from Right to Left Direction
+    // Check for Win: Right to Left Direction
     public boolean checkWinRightLeft(int rowNumber, int columnNumber, Player turnPlayer) {
         // Player Wins if Count = 4
         int count = 0;
@@ -341,7 +341,7 @@ public class GameController {
         return false;
     }
 
-    // Check for Win from Left to Right Direction
+    // Check for Win: Left to Right Direction
     public boolean checkWinLeftRight(int rowNumber, int columnNumber, Player turnPlayer) {
         // Player Wins if Count = 4
         int count = 0;
@@ -378,7 +378,7 @@ public class GameController {
         return false;
     }
 
-    // Check for Win from Top-Left to Bottom-Right (including Middle)
+    // Check for Win: Top-Left to Bottom-Right (including Middle)
     public boolean checkWinTopLeftBottomRightA(int rowNumber, int columnNumber, Player turnPlayer) {
         // Player Wins if Count = 4
         int count = 0;
@@ -419,7 +419,7 @@ public class GameController {
         return false;
     }
 
-    // Check for Win from Top Left to Bottom Right (After Middle)
+    // Check for Win: Top Left to Bottom Right (After Middle)
     public boolean checkWinTopLeftBottomRightB(int rowNumber, int columnNumber, Player turnPlayer) {
 
         // Player Wins if Count = 4
@@ -460,7 +460,7 @@ public class GameController {
         return false;
     }
 
-    // Check for Win from Bottom-Left to Top-Right (including Middle)
+    // Check for Win: Bottom-Left to Top-Right (including Middle)
     public boolean checkWinBottomLeftTopRightA(int rowNumber, int columnNumber, Player turnPlayer) {
 
         // Player Wins if Count = 4
@@ -500,7 +500,7 @@ public class GameController {
         return false;
     }
 
-    // Check for Win from Bottom-Left to Top-Right (After Middle)
+    // Check for Win: Bottom-Left to Top-Right (After Middle)
     public boolean checkWinBottomLeftTopRightB(int rowNumber, int columnNumber, Player turnPlayer) {
 
         // Player Wins if Count = 4
@@ -541,7 +541,7 @@ public class GameController {
         return false;
     }
 
-    /* ~ Utility Methods */
+    /* ~ Utility Methods ~ */
     // Validate the Input of Column to Insert
     public boolean checkValidColumn(int columnToInsert) {
         // Validate Column to Insert to Valid
@@ -552,7 +552,7 @@ public class GameController {
         }
     }
 
-    // Randomize "Who Goes First?"
+    // Randomize Player: "Who Goes First?"
     public void randomizePlayers() {
         // Use Math Random
         double randomNumber = Math.random();
